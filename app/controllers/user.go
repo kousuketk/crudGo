@@ -1,9 +1,11 @@
 package controllers
 
 import (
-	"app/middlewares"
-	"app/models"
 	"net/http"
+
+	"github.com/kousuketk/crudGo/app/middlewares"
+
+	"github.com/kousuketk/crudGo/app/models"
 
 	"github.com/git-gonic/gin"
 )

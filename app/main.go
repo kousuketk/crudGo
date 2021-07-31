@@ -3,9 +3,9 @@ package main
 import (
 	"net/http"
 
-	"app/middlewares"
+	"github.com/kousuketk/crudGo/app/middlewares"
 
-	"app/controllers"
+	"github.com/kousuketk/crudGo/app/controllers"
 
 	"github.com/gin-gonic/gin"
 )

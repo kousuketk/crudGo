@@ -1,4 +1,4 @@
-module sampleDocker/app
+module github.com/kousuketk/crudGo/app
 
 go 1.16
 
