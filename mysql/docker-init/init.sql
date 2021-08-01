@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users(
   phone_number varchar(255) NOT NULL,
   created_at datetime default current_timestamp,
   updated_at timestamp default current_timestamp on update current_timestamp,
+  deleted_at datetime,
   PRIMARY KEY (id)
 );
 
