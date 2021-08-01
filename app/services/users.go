@@ -20,3 +20,16 @@ func (UserServices) GetUserById(ID int) (models.User, error) {
 
 	return user, result.Error
 }
+
+func (UserServices) CreateUser(name string, selfIntroduction string, email string, passwordDigest string, address string, phoneNumber string) (models.User, error) {
+	user := models.User{
+		Name:             name,
+		SelfIntroduction: selfIntroduction,
+		Email:            email,
+		PasswordDigest:   passwordDigest,
+		Address:          address,
+		PhoneNumber:      phoneNumber}
+	result := middlewares.DB().Create(&user)
+
+	return user, result.Error
+}

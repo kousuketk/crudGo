@@ -10,7 +10,7 @@ func Setup(r *gin.RouterGroup) {
 		u := UserController{}
 		users.GET("", u.Index)
 		users.GET("/:id", u.GetUser)
-		// users.POST("", u.CreateUser)
+		users.POST("", u.CreateUser)
 		// users.PATCH("/:id", u.UpdateUser)
 		// users.DELETE("/:id", u.DeleteUser)
 	}
