@@ -7,23 +7,16 @@ import (
 
 type UserServices struct{}
 
-func (UserServices) GetUsers() []*models.User {
+func (UserServices) GetUsers() ([]*models.User, error) {
 	var users []*models.User
-	// users := make([]models.User, 0)
-	err := middlewares.DB().Find(&users)
-	if err != nil {
-		panic(err)
-	}
+	result := middlewares.DB().Find(&users)
 
-	return users
+	return users, result.Error
 }
 
-func (UserServices) GetUserById(ID int) models.User {
+func (UserServices) GetUserById(ID int) (models.User, error) {
 	var user models.User
-	err := middlewares.DB().Where("id = ?", ID).First(&user)
-	if err != nil {
-		panic(err)
-	}
+	result := middlewares.DB().Where("id = ?", ID).First(&user)
 
-	return user
+	return user, result.Error
 }

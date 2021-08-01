@@ -19,16 +19,24 @@ type UserParam struct {
 // ユーザー一覧
 func (self *UserController) Index(c *gin.Context) {
 	userServices := services.UserServices{}
-	users := userServices.GetUsers()
+	users, err := userServices.GetUsers()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{"users": users})
 }
 
 func (self *UserController) GetUser(c *gin.Context) {
-	userServices := services.UserServices{}
 	ID := c.Params.ByName("id")
 	userID, _ := strconv.Atoi(ID)
-	user := userServices.GetUserById(userID)
+	userServices := services.UserServices{}
+	user, err := userServices.GetUserById(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
