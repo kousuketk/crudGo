@@ -4,10 +4,10 @@ USE godb;
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users(
-  id int NOT NULL AUTO_INCREMENT,
+  id int unique NOT NULL AUTO_INCREMENT,
   name varchar(255) NOT NULL,
   self_introduction text,
-  email varchar(255) NOT NULL,
+  email varchar(255) unique NOT NULL,
   password_digest varchar(255) NOT NULL,
   address varchar(255) NOT NULL,
   phone_number varchar(255) NOT NULL,
