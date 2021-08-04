@@ -1,6 +1,8 @@
 package models
 
 import (
+	"reflect"
+
 	"gorm.io/gorm"
 )
 
@@ -12,4 +14,8 @@ type User struct {
 	PasswordDigest   string `json:"passwordDigest"`
 	Address          string `json:"address"`
 	PhoneNumber      string `json:"phoneNumber"`
+}
+
+func (u User) IsEmpty() bool {
+	return reflect.DeepEqual(u, User{})
 }

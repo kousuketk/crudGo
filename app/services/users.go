@@ -14,9 +14,16 @@ func (UserServices) GetUsers() ([]*models.User, error) {
 	return users, result.Error
 }
 
-func (UserServices) GetUserById(ID int) (models.User, error) {
+func (UserServices) GetUserById(Id int) (models.User, error) {
 	var user models.User
-	result := middlewares.DB().Where("id = ?", ID).First(&user)
+	result := middlewares.DB().Where("id = ?", Id).First(&user)
+
+	return user, result.Error
+}
+
+func (UserServices) GetUserByEmail(Email string) (models.User, error) {
+	var user models.User
+	result := middlewares.DB().Where("email = ?", Email).First(&user)
 
 	return user, result.Error
 }

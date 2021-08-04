@@ -15,7 +15,7 @@ type UserParam struct {
 	Name             string `json:"name" binding:"required,min=1,max=50"`
 	SelfIntroduction string `json:"selfIntroduction"`
 	Email            string `json:"email" binding:"required"`
-	PasswordDigest   string `json:"passwordDigest"`
+	PasswordDigest   string `json:"password"`
 	Address          string `json:"address"`
 	PhoneNumber      string `json:"phoneNumber"`
 }
@@ -37,8 +37,11 @@ func (self *UserController) GetUser(c *gin.Context) {
 	userID, _ := strconv.Atoi(ID)
 	userServices := services.UserServices{}
 	user, err := userServices.GetUserById(userID)
-	if err != nil {
+	if user.IsEmpty() == true {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		return
+	} else if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
@@ -62,7 +65,7 @@ func (self *UserController) CreateUser(c *gin.Context) {
 		param.PhoneNumber)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user create failed"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 

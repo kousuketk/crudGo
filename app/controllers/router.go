@@ -11,7 +11,19 @@ func Setup(r *gin.RouterGroup) {
 		users.GET("", u.Index)
 		users.GET("/:id", u.GetUser)
 		users.POST("", u.CreateUser)
-		// users.PATCH("/:id", u.UpdateUser)
-		// users.DELETE("/:id", u.DeleteUser)
+	}
+	auth := r.Group("")
+	{
+		a := AuthController{}
+		auth.POST("/login", a.Login)
+		auth.POST("/logout", a.Logout)
+	}
+	// me := r.Group("/me", middlewares.CheckJWTHandler)
+	me := r.Group("/me")
+	{
+		m := MeController{}
+		me.GET("", m.Index)
+		me.POST("", m.UpdateMe)
+		me.DELETE("", m.DeleteMe)
 	}
 }
