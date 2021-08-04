@@ -2,15 +2,18 @@ package middlewares
 
 import (
 	"github.com/kousuketk/crudGo/app/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func CreatePassword(rowPassword string) (string, error) {
-	return "test", nil
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(rowPassword), 10)
+	return string(hashedPassword), err
 }
 
 func VerifyPassword(user models.User, password string) (bool, error) {
-	if user.PasswordDigest == password {
+	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
+	if err == nil {
 		return true, nil
 	}
-	return false, nil
+	return false, err
 }

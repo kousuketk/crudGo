@@ -29,11 +29,12 @@ func (UserServices) GetUserByEmail(Email string) (models.User, error) {
 }
 
 func (UserServices) CreateUser(name string, selfIntroduction string, email string, passwordDigest string, address string, phoneNumber string) (models.User, error) {
+	hashedPassword, _ := middlewares.CreatePassword(passwordDigest)
 	user := models.User{
 		Name:             name,
 		SelfIntroduction: selfIntroduction,
 		Email:            email,
-		PasswordDigest:   passwordDigest,
+		PasswordDigest:   string(hashedPassword),
 		Address:          address,
 		PhoneNumber:      phoneNumber}
 	result := middlewares.DB().Create(&user)

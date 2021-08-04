@@ -37,11 +37,8 @@ func (self *AuthController) Login(c *gin.Context) {
 		return
 	}
 
-	flag, err2 := middlewares.VerifyPassword(user, param.Password)
-	if err2 != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-		return
-	} else if flag == false {
+	flag, _ := middlewares.VerifyPassword(user, param.Password)
+	if flag == false {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "password is not correct"})
 		return
 	}
