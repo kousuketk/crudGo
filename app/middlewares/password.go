@@ -12,8 +12,8 @@ func CreatePassword(rowPassword string) (string, error) {
 
 func VerifyPassword(user models.User, password string) (bool, error) {
 	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
-	if err == nil {
-		return true, nil
+	if err != nil {
+		return false, err
 	}
-	return false, err
+	return true, err
 }
