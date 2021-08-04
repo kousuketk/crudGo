@@ -17,10 +17,6 @@ type LoginParam struct {
 }
 
 func (self *AuthController) Login(c *gin.Context) {
-	// もしjwtがあったら, それで検証する
-	// →userが見つかる→alredy login, userが見つからない→以下の処理へ以降
-	// param.email, passを見て検証する, useridを保持する
-	// findbyemai, passを見て検証する
 	var param LoginParam
 	if err := c.BindJSON(&param); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})

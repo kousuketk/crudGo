@@ -33,10 +33,10 @@ func (self *UserController) Index(c *gin.Context) {
 }
 
 func (self *UserController) GetUser(c *gin.Context) {
-	ID := c.Params.ByName("id")
-	userID, _ := strconv.Atoi(ID)
+	id := c.Params.ByName("id")
+	userId, _ := strconv.Atoi(id)
 	userServices := services.UserServices{}
-	user, err := userServices.GetUserById(userID)
+	user, err := userServices.GetUserById(userId)
 	if user.IsEmpty() == true {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 		return

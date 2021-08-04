@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kousuketk/crudGo/app/middlewares"
+	"github.com/kousuketk/crudGo/app/services"
 )
 
 type MeController struct{}
@@ -18,7 +20,17 @@ type MeParam struct {
 }
 
 func (self *MeController) Index(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"me": "me index"})
+	// cをもらってuserを返すmiddlewareを作成する
+	userId := middlewares.Authorization(c)
+	userServices := services.UserServices{}
+	user, err := userServices.GetUserById(userId)
+	if user.IsEmpty() == true {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+	} else if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
 func (self *MeController) UpdateMe(c *gin.Context) {
