@@ -28,16 +28,25 @@ func (UserServices) GetUserByEmail(Email string) (models.User, error) {
 	return user, result.Error
 }
 
-func (UserServices) CreateUser(name string, selfIntroduction string, email string, passwordDigest string, address string, phoneNumber string) (models.User, error) {
-	hashedPassword, _ := middlewares.CreatePassword(passwordDigest)
-	user := models.User{
-		Name:             name,
-		SelfIntroduction: selfIntroduction,
-		Email:            email,
-		PasswordDigest:   string(hashedPassword),
-		Address:          address,
-		PhoneNumber:      phoneNumber}
+func (UserServices) CreateUser(user models.User) (models.User, error) {
+	hashedPassword, _ := middlewares.CreatePassword(user.PasswordDigest)
+	user.PasswordDigest = hashedPassword
 	result := middlewares.DB().Create(&user)
 
 	return user, result.Error
+}
+
+func (UserServices) UpdateUser(userId int, user models.User) (models.User, error) {
+	hashedPassword, _ := middlewares.CreatePassword(user.PasswordDigest)
+	user.PasswordDigest = hashedPassword
+	// result := middlewares.DB().Updates(&user)
+	result := middlewares.DB().Where("id = ?", userId).Updates(&user)
+
+	return user, result.Error
+}
+
+func (UserServices) DeleteUser(userId int) error {
+	result := middlewares.DB().Delete(&models.User{}, userId)
+
+	return result.Error
 }

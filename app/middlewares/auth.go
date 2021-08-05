@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -35,12 +34,13 @@ func VerifyToken(tokenString string) (*jwt.Token, error) {
 	return token, nil
 }
 
-func Authorization(c *gin.Context) int {
+func Authorization(c *gin.Context) (int, bool) {
 	tokenString := c.GetHeader("Authorization")
 	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 	token, err := VerifyToken(tokenString)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"error": err})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return -1, false
 	}
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -48,8 +48,9 @@ func Authorization(c *gin.Context) int {
 	if str, ok := userId.(string); ok {
 		userId, _ = strconv.Atoi(str)
 	} else {
-		fmt.Println("cast failed.")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "cast failed."})
+		return -1, false
 	}
 
-	return userId.(int)
+	return userId.(int), true
 }

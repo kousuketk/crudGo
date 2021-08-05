@@ -17,14 +17,14 @@ type LoginParam struct {
 }
 
 func (a *AuthController) Login(c *gin.Context) {
-	var param LoginParam
-	if err := c.BindJSON(&param); err != nil {
+	var params LoginParam
+	if err := c.BindJSON(&params); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
 	userServices := services.UserServices{}
-	user, err := userServices.GetUserByEmail(param.Email)
+	user, err := userServices.GetUserByEmail(params.Email)
 	if user.IsEmpty() {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 		return
@@ -33,8 +33,11 @@ func (a *AuthController) Login(c *gin.Context) {
 		return
 	}
 
-	flag, _ := middlewares.VerifyPassword(user, param.Password)
-	if !flag {
+	flag, err := middlewares.VerifyPassword(user, params.Password)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	} else if !flag {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "password is not correct"})
 		return
 	}

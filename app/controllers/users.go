@@ -4,21 +4,13 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/kousuketk/crudGo/app/models"
 	"github.com/kousuketk/crudGo/app/services"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserController struct{}
-
-type UserParam struct {
-	Name             string `json:"name" binding:"required,min=1,max=50"`
-	SelfIntroduction string `json:"selfIntroduction"`
-	Email            string `json:"email" binding:"required"`
-	PasswordDigest   string `json:"password"`
-	Address          string `json:"address"`
-	PhoneNumber      string `json:"phoneNumber"`
-}
 
 // ユーザー一覧
 func (u *UserController) Index(c *gin.Context) {
@@ -49,20 +41,14 @@ func (u *UserController) GetUser(c *gin.Context) {
 }
 
 func (u *UserController) CreateUser(c *gin.Context) {
-	var param UserParam
-	if err := c.BindJSON(&param); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	var userParams models.User
+	if err := c.BindJSON(&userParams); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
 	userServices := services.UserServices{}
-	user, err := userServices.CreateUser(
-		param.Name,
-		param.SelfIntroduction,
-		param.Email,
-		param.PasswordDigest,
-		param.Address,
-		param.PhoneNumber)
+	user, err := userServices.CreateUser(userParams)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
