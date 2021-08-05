@@ -16,7 +16,7 @@ type LoginParam struct {
 	Password string `json:"Password"`
 }
 
-func (self *AuthController) Login(c *gin.Context) {
+func (a *AuthController) Login(c *gin.Context) {
 	var param LoginParam
 	if err := c.BindJSON(&param); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
@@ -51,7 +51,7 @@ func (self *AuthController) Login(c *gin.Context) {
 	})
 }
 
-func (self *AuthController) Logout(c *gin.Context) {
+func (a *AuthController) Logout(c *gin.Context) {
 	// jwtをinvalidにする
 	c.JSON(http.StatusOK, gin.H{"auth": "Logout"})
 }

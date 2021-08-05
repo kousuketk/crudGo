@@ -19,12 +19,12 @@ type MeParam struct {
 	PhoneNumber      string `json:"phoneNumber"`
 }
 
-func (self *MeController) Index(c *gin.Context) {
+func (m *MeController) Index(c *gin.Context) {
 	// cをもらってuserを返すmiddlewareを作成する
 	userId := middlewares.Authorization(c)
 	userServices := services.UserServices{}
 	user, err := userServices.GetUserById(userId)
-	if user.IsEmpty() == true {
+	if user.IsEmpty() {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 	} else if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
@@ -33,10 +33,10 @@ func (self *MeController) Index(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
-func (self *MeController) UpdateMe(c *gin.Context) {
+func (m *MeController) UpdateMe(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"me": "me UpdateMe"})
 }
 
-func (self *MeController) DeleteMe(c *gin.Context) {
+func (m *MeController) DeleteMe(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"me": "me DeleteMe"})
 }

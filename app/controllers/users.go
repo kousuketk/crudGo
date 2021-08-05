@@ -21,7 +21,7 @@ type UserParam struct {
 }
 
 // ユーザー一覧
-func (self *UserController) Index(c *gin.Context) {
+func (u *UserController) Index(c *gin.Context) {
 	userServices := services.UserServices{}
 	users, err := userServices.GetUsers()
 	if err != nil {
@@ -32,12 +32,12 @@ func (self *UserController) Index(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"users": users})
 }
 
-func (self *UserController) GetUser(c *gin.Context) {
+func (u *UserController) GetUser(c *gin.Context) {
 	id := c.Params.ByName("id")
 	userId, _ := strconv.Atoi(id)
 	userServices := services.UserServices{}
 	user, err := userServices.GetUserById(userId)
-	if user.IsEmpty() == true {
+	if user.IsEmpty() {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 		return
 	} else if err != nil {
@@ -48,7 +48,7 @@ func (self *UserController) GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
-func (self *UserController) CreateUser(c *gin.Context) {
+func (u *UserController) CreateUser(c *gin.Context) {
 	var param UserParam
 	if err := c.BindJSON(&param); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
