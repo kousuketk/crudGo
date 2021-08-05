@@ -41,7 +41,7 @@ func (UserRepository) UpdateUser(id int, user models.User) error {
 }
 
 func (UserRepository) DeleteUser(id int) error {
-	err := middlewares.DB().Table("users").Delete(id)
+	err := middlewares.DB().Delete(&models.User{}, id)
 
 	return err.Error
 }

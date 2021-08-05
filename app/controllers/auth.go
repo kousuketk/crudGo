@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -27,15 +26,13 @@ func (a *AuthController) Login(c *gin.Context) {
 	}
 
 	user, err := userRepo.GetUserByEmail(params.Email)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-		return
-	} else if user.IsEmpty() {
+	if user.IsEmpty() {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 		return
+	} else if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
 	}
-
-	fmt.Println(user)
 
 	flag, err := middlewares.VerifyPassword(user, params.Password)
 	if !flag {

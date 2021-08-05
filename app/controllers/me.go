@@ -28,11 +28,11 @@ func (m *MeController) Index(c *gin.Context) {
 		return
 	}
 	user, err := meServices.Index(userId)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-		return
-	} else if user.IsEmpty() {
+	if user.IsEmpty() {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found."})
+		return
+	} else if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
