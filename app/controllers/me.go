@@ -50,14 +50,14 @@ func (m *MeController) UpdateMe(c *gin.Context) {
 	}
 
 	userServices := services.UserServices{}
-	user, err := userServices.UpdateUser(userId, user)
+	err := userServices.UpdateUser(userId, user)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"user": user})
+	c.JSON(http.StatusOK, gin.H{"message": "success updated."})
 }
 
 func (m *MeController) DeleteMe(c *gin.Context) {

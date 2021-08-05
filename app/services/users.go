@@ -36,13 +36,12 @@ func (UserServices) CreateUser(user models.User) (models.User, error) {
 	return user, result.Error
 }
 
-func (UserServices) UpdateUser(userId int, user models.User) (models.User, error) {
+func (UserServices) UpdateUser(userId int, user models.User) error {
 	hashedPassword, _ := middlewares.CreatePassword(user.PasswordDigest)
 	user.PasswordDigest = hashedPassword
-	// result := middlewares.DB().Updates(&user)
 	result := middlewares.DB().Where("id = ?", userId).Updates(&user)
 
-	return user, result.Error
+	return result.Error
 }
 
 func (UserServices) DeleteUser(userId int) error {
