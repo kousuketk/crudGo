@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/kousuketk/crudGo/app/models"
+	"github.com/kousuketk/crudGo/app/serializers"
 	"github.com/kousuketk/crudGo/app/services"
 
 	"github.com/gin-gonic/gin"
@@ -20,8 +21,9 @@ func (u *UserController) Index(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 		return
 	}
+	result := serializers.UserSliceSerialize(users)
 
-	c.JSON(http.StatusOK, gin.H{"users": users})
+	c.JSON(http.StatusOK, gin.H{"users": result})
 }
 
 func (u *UserController) GetUser(c *gin.Context) {
@@ -36,8 +38,9 @@ func (u *UserController) GetUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
+	result := serializers.UserSerialize(user)
 
-	c.JSON(http.StatusOK, gin.H{"user": user})
+	c.JSON(http.StatusOK, gin.H{"user": result})
 }
 
 func (u *UserController) CreateUser(c *gin.Context) {

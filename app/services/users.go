@@ -7,8 +7,8 @@ import (
 
 type UserServices struct{}
 
-func (UserServices) GetUsers() ([]*models.User, error) {
-	var users []*models.User
+func (UserServices) GetUsers() ([]models.User, error) {
+	var users []models.User
 	result := middlewares.DB().Find(&users)
 
 	return users, result.Error
