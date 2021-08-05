@@ -13,11 +13,12 @@ import (
 
 type UserController struct{}
 
+var userServices services.UserServices
+
 func (u *UserController) Index(c *gin.Context) {
-	userServices := services.UserServices{}
 	users, err := userServices.GetUsers()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
 	result := serializers.UserSliceSerialize(users)
@@ -28,7 +29,6 @@ func (u *UserController) Index(c *gin.Context) {
 func (u *UserController) GetUser(c *gin.Context) {
 	id := c.Params.ByName("id")
 	userId, _ := strconv.Atoi(id)
-	userServices := services.UserServices{}
 	user, err := userServices.GetUserById(userId)
 	if user.IsEmpty() {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
@@ -48,10 +48,7 @@ func (u *UserController) CreateUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
-
-	userServices := services.UserServices{}
 	user, err := userServices.CreateUser(userParams)
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return

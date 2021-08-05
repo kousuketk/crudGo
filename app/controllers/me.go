@@ -20,18 +20,19 @@ type MeParam struct {
 	PhoneNumber      string `json:"phoneNumber"`
 }
 
+var meServices services.MeServices
+
 func (m *MeController) Index(c *gin.Context) {
 	userId, flag := middlewares.Authorization(c)
 	if !flag {
 		return
 	}
-	userServices := services.UserServices{}
-	user, err := userServices.GetUserById(userId)
-	if user.IsEmpty() {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found."})
-		return
-	} else if err != nil {
+	user, err := meServices.Index(userId)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	} else if user.IsEmpty() {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found."})
 		return
 	}
 
@@ -48,10 +49,7 @@ func (m *MeController) UpdateMe(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
-
-	userServices := services.UserServices{}
-	err := userServices.UpdateUser(userId, user)
-
+	err := meServices.UpdateMe(userId, user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
@@ -65,9 +63,7 @@ func (m *MeController) DeleteMe(c *gin.Context) {
 	if !flag {
 		return
 	}
-	userServices := services.UserServices{}
-	err := userServices.DeleteUser(userId)
-
+	err := meServices.DeleteMe(userId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
