@@ -13,7 +13,6 @@ import (
 
 type UserController struct{}
 
-// ユーザー一覧
 func (u *UserController) Index(c *gin.Context) {
 	userServices := services.UserServices{}
 	users, err := userServices.GetUsers()

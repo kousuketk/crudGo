@@ -18,7 +18,6 @@ func Setup(r *gin.RouterGroup) {
 		auth.POST("/login", a.Login)
 		auth.POST("/logout", a.Logout)
 	}
-	// me := r.Group("/me", middlewares.CheckJWTHandler)
 	me := r.Group("/me")
 	{
 		m := MeController{}
