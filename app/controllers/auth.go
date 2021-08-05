@@ -25,7 +25,7 @@ func (a *AuthController) Login(c *gin.Context) {
 
 	userServices := services.UserServices{}
 	user, err := userServices.GetUserByEmail(param.Email)
-	if user.IsEmpty() == true {
+	if user.IsEmpty() {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 		return
 	} else if err != nil {
@@ -34,7 +34,7 @@ func (a *AuthController) Login(c *gin.Context) {
 	}
 
 	flag, _ := middlewares.VerifyPassword(user, param.Password)
-	if flag == false {
+	if !flag {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "password is not correct"})
 		return
 	}
