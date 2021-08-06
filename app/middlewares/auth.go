@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -16,7 +17,7 @@ func CreateToken(userId string) (string, error) {
 		"user": userId,
 		"exp":  time.Now().Add(time.Hour * 1).Unix(), // 有効期限を指定
 	}
-	var secretKey = "secret" // 任意の文字列4
+	secretKey := os.Getenv("SECRETKEY")
 	tokenString, err := token.SignedString([]byte(secretKey))
 	if err != nil {
 		return "", err
@@ -25,8 +26,9 @@ func CreateToken(userId string) (string, error) {
 }
 
 func VerifyToken(tokenString string) (*jwt.Token, error) {
+	secretKey := os.Getenv("SECRETKEY")
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte("secret"), nil
+		return []byte(secretKey), nil
 	})
 	if err != nil {
 		return token, err
