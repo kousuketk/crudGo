@@ -5,15 +5,13 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/joho/godotenv"
-	"github.com/kousuketk/crudGo/app/middlewares"
-
-	"github.com/kousuketk/crudGo/app/controllers"
-
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	"github.com/kousuketk/crudGo/app/controllers"
+	"github.com/kousuketk/crudGo/app/middlewares"
 )
 
-func main() {
+func Router() *gin.Engine {
 	// gormのDB接続
 	middlewares.Setup()
 	router := gin.Default()
@@ -32,6 +30,9 @@ func main() {
 
 	r := router.Group("/api/v1")
 	controllers.Setup(r)
+	return router
+}
 
-	router.Run()
+func main() {
+	Router().Run()
 }

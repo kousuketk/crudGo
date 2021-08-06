@@ -8,3 +8,8 @@ go run main.go
 
 - mysql
 docker exec -it crudgo_db_1 bash
+
+### test
+```
+go test ./test/controller/ -cover
+```
